@@ -30,16 +30,12 @@ var appConfig = {
         loaders:[
             {
                 test: /\.jsx$/,
-                loader: "babel",
-                query: {
-                    presets: ['es2015', 'react']
-                }
+                loader: "babel"
             },
             {
                 test:   /\.js$/,
                 loader: "babel",
                 query: {
-                    presets: ['es2015'],
                     compact:'true'
                 }
             },
