@@ -7,22 +7,22 @@ import {observer, Provider} from 'mobx-react'
 var platformStore = new PlatformStore();
 
 
-console.log(['platformStore', platformStore, platformStore.dealFormSum, Provider]);
+//console.log(['platformStore', platformStore, platformStore.dealFormSum, Provider]);
 
 
 
+
+/*
 
 setTimeout(function(){
 
     platformStore.dealFormSum = 100;
 
-
 }.bind(this), 3000);
 
+*/
 
 
-
-console.log(['observer', observer]);
 
 
 @observer(["platformStore"])
@@ -30,18 +30,24 @@ class Component extends React.Component{
     render(){
         
 
-        //this.props.platformStore.dealFormSum
-        
-        
-        console.log(['this.props', this.props]);
-        return <div>Dummy component: {this.props.platformStore.dealFormSum}</div>
+
+        //console.log(['this.props', this.props]);
+
+
+        return <div>Dummy component: {this.props.platformStore.dealFormSum}
+
+
+            <br/>
+
+            <a href="javascript:;" onClick={this.props.platformStore.changeSum.bind(this.props.platformStore, 567)}>Click</a>
+        </div>
     }
 }
 
 
 class Entry extends React.Component{
     render(){
-        console.log([777]);
+   
         return  (<Provider platformStore={platformStore}>
             <Component/>
         </Provider>)
