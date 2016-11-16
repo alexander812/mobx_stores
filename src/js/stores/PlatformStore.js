@@ -1,51 +1,37 @@
-import { observable, action } from 'mobx';
-
-
-
-function mixin(source, target) {
-    for (var prop in source) {
-        if (source.hasOwnProperty(prop)) {
-            target[prop] = source[prop];
-        }
-    }
-}
+import { observable, action, computed } from 'mobx';
+import { mix } from 'util/utils';
 
 
 var actions = {
-    @action someAction (sum) {
-        console.log([55, arguments]);
-        this.earn = 5;
-        this.dealFormSum = sum;
+    @action changeSum (sum) {
+        this.winperc = 50;
+
+        setTimeout(()=>{
+            this.sum = sum;
+        }, 2000);
 
     }
 };
 
 
+
+
 class PlatformStore{
-    @observable dealFormSum = 0;
-    @observable earn = 0;
-    constructor(){
-
-        this.earn = 10;
-        this.dealFormSum = 888;
-
-
-        //Object.assign(this, actions);
-
-        console.log('this11', this);
-
+    @observable sum = 0;
+    @observable winperc = 80;
+    @computed get earn() {
+        return Math.floor(this.sum / 100 * this.winperc);
     }
 
-    @action changeSum (sum) {
-        console.log([55, arguments]);
-        this.earn = 5;
-        this.dealFormSum = sum;
+    constructor(){
+        
+        this.sum = 1000;
 
+        mix(this, actions);
     }
 
 }
 
-mixin(actions, PlatformStore.prototype);
 
 
 
