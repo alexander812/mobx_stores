@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, autorun, extendObservable } from 'mobx';
 import { mix } from 'util/utils';
 
 
@@ -13,21 +13,36 @@ var actions = {
     }
 };
 
+class SocketModel{
+    @observable result = 0;
 
+    constructor(){
+
+        this.result = 1000;
+
+        setTimeout(function(){
+            this.result = 111;
+            console.log(['setTimeout']);
+        }.bind(this), 1000);
+
+    }
+
+}
 
 
 class PlatformStore{
     @observable sum = 0;
     @observable winperc = 80;
+    @observable socketResult = null;
     @computed get earn() {
         return Math.floor(this.sum / 100 * this.winperc);
     }
-
     constructor(){
         
         this.sum = 1000;
 
         mix(this, actions);
+        this.socketResult = new SocketModel();
     }
 
 }

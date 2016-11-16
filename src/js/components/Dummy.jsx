@@ -1,11 +1,16 @@
 import React from 'react';
 import PlatformStore from 'stores/PlatformStore';
 import {observer, Provider} from 'mobx-react'
+import {autorun} from 'mobx'
 
 
 
 var platformStore = new PlatformStore();
 
+autorun(() => {
+
+    console.log(platformStore.socketResult.result)
+});
 
 @observer(["platformStore"])
 class Component extends React.Component{
