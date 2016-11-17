@@ -5,6 +5,7 @@ function Connector(Component, stores, options) {
 
 
 
+    /*
     @observer class Wrapper2 extends React.Component{
 
         static contextTypes = {
@@ -22,9 +23,10 @@ function Connector(Component, stores, options) {
             />
         }
     }
+    */
 
 
-    class Wrapper extends React.Component{
+@observer class Wrapper extends React.Component{
 
         static childContextTypes = {
             store:  React.PropTypes.object
@@ -39,19 +41,17 @@ function Connector(Component, stores, options) {
         componentWillMount(){
 
             this.store = stores.store();
-
-            //console.log(['this.store', this.store]);
-
         }
 
         render(){
 
-            return  <Wrapper2
+            return  <Component
             store={this.store}
+            sum={this.store.sum}
+            earn={this.store.earn}
             />
         }
     }
-
 
 
     return Wrapper

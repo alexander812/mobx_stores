@@ -5,6 +5,9 @@ import Connector from 'util/Connector';
 import globalStore from 'stores/GlobalStore';
 
 class SomeComp extends React.Component{
+    static contextTypes = {
+        store: React.PropTypes.object
+    };
 
     act(v1, v2, v3, v4){
 
@@ -12,6 +15,7 @@ class SomeComp extends React.Component{
             this.context.store[v1](v2, v3, v4);
         }
     }
+
     render(){
         
         console.log(['SomeComp', this.props, this]);
@@ -27,11 +31,6 @@ class SomeComp extends React.Component{
         </div>
     }
 }
-
-SomeComp.contextTypes = {
-    store: React.PropTypes.object
-};
-
 
 export default Connector(
     SomeComp,
