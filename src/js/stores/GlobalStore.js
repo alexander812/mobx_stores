@@ -1,5 +1,5 @@
 import { observable, action, computed, autorun } from 'mobx';
-import { mix } from 'util/util';
+import { mix } from 'helper/util';
 
 class GlobalStore{
 

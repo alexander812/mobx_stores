@@ -1,24 +1,13 @@
 import React from 'react';
 import PlatformStore from 'modules/Platforfm/store/PlatformStore';
 import {observer, Provider} from 'mobx-react'
-import Connector from 'util/Connector';
+import Connector from 'helper/Connector';
 import globalStore from 'stores/GlobalStore';
+import BaseComponent from 'helper/react/BaseComponent';
 
-class SomeComp extends React.Component{
-    static contextTypes = {
-        store: React.PropTypes.object
-    };
-
-    act(v1, v2, v3, v4){
-
-        if(this.context.store && this.context.store[v1]){
-            this.context.store[v1](v2, v3, v4);
-        }
-    }
+class SomeComp extends BaseComponent{
 
     render(){
-        
-        console.log(['SomeComp', this.props, this]);
 
         return <div>
 
@@ -38,31 +27,19 @@ class SomeComp extends React.Component{
 
 export default Connector(
     SomeComp,
-    ()=>new PlatformStore(),
-    function(){
-        
-        
-    }
-        
-);
+    [
+        ()=>new PlatformStore(),
+        globalStore
+    ],
 
-/*
+    function(PlatformStore, globalStore){
 
-export default Connector(
-    SomeComp,
-    {
-        store(){
-            return new PlatformStore()
-        },
-        globalStore:globalStore
-    },
-    {
-        helper(){
-
-            console.log(['helper', arguments]);
-
+        return {
+            sum:PlatformStore.sum,
+            earn:PlatformStore.earn,
+            serverTime:globalStore.serverTime
         }
+        
     }
         
 );
- */

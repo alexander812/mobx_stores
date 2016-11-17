@@ -1,5 +1,5 @@
 import { observable, action, computed, autorun, extendObservable } from 'mobx';
-import { mix } from 'util/util';
+import { mix } from 'helper/util';
 import platformActions  from 'modules/Platforfm/action/platformActions';
 
 
