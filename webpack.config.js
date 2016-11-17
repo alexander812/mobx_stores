@@ -22,7 +22,8 @@ var appConfig = {
     watchOptions: {
         aggregateTimeout: 100
     },
-    devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
+    //devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
+    devtool:  "inline-source-map",
     plugins: [
         new webpack.IgnorePlugin(/\.\/locale/)
     ],

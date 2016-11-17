@@ -22,7 +22,7 @@ class SocketModel{
 
         setTimeout(function(){
             this.result = 111;
-            console.log(['setTimeout']);
+            //console.log(['setTimeout']);
         }.bind(this), 1000);
 
     }

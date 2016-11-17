@@ -3,8 +3,6 @@ import { mix } from 'util/util';
 import platformActions  from 'modules/Platforfm/action/platformActions';
 
 
-console.log(['platformActions', platformActions]);
-
 
 class PlatformStore{
     @observable sum = 0;
@@ -13,13 +11,7 @@ class PlatformStore{
         return Math.floor(this.sum / 100 * this.winperc);
     }
     constructor(){
-        
         this.sum = 1000;
-
-
-        console.log(['PlatformStore', this]);
-        
-        
 
     }
 
