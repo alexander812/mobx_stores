@@ -39,14 +39,11 @@ function Connector(Component, stores, options) {
         }
 
         componentWillMount(){
-
             this.store = stores.store();
         }
-
         render(){
 
             return  <Component
-            store={this.store}
             sum={this.store.sum}
             earn={this.store.earn}
             />

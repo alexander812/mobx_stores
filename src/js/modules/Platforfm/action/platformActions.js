@@ -5,7 +5,7 @@ var actions = {
         this.winperc = 50;
 
         setTimeout(()=>{
-            this.sum = sum;
+            this.dealType = 'binary';
         }, 2000);
 
     }

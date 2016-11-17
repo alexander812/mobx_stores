@@ -7,6 +7,8 @@ import platformActions  from 'modules/Platforfm/action/platformActions';
 class PlatformStore{
     @observable sum = 0;
     @observable winperc = 80;
+    @observable dealType = 'turbo';
+
     @computed get earn() {
         return Math.floor(this.sum / 100 * this.winperc);
     }
