@@ -27,10 +27,26 @@ class SomeComp extends React.Component{
             Sum:{this.props.sum}
             <br/>
             Earn:{this.props.earn}
+            <br/>
+            serverTime:{this.props.serverTime}
+            <br/>
+
             <a href="javascript:;" onClick={()=>this.act('changeSum', 400)}>Click</a>
         </div>
     }
 }
+
+export default Connector(
+    SomeComp,
+    ()=>new PlatformStore(),
+    function(){
+        
+        
+    }
+        
+);
+
+/*
 
 export default Connector(
     SomeComp,
@@ -43,7 +59,10 @@ export default Connector(
     {
         helper(){
 
+            console.log(['helper', arguments]);
+
         }
     }
         
 );
+ */

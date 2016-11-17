@@ -38,14 +38,63 @@ function Connector(Component, stores, options) {
             };
         }
 
-        componentWillMount(){
-            this.store = stores.store();
+
+        resolveStore(store){
+            return typeof store === 'function' ? store.call(this) : store;
         }
+
+        resolveStores(stores){
+            var key;
+            var resolved;
+
+            for (key in stores) {
+                if (!stores.hasOwnProperty(key)) continue;
+                resolved = this.resolveStore(stores[key]);
+                this.storesResolvedArr.push(resolved);
+                this.storesResolved[key] = resolved;
+            }
+        }
+    
+        componentWillMount(){
+            this.options = options;
+            this.storesResolvedArr = [];
+            this.storesResolved = {};
+            this.resolveStores(stores);
+            this.store = this.storesResolved.store;
+
+        }
+
+        composeProps(){
+            var helper = typeof options === 'function' || options.helper;
+
+            if(helper){
+                return options.helper.apply(this, this.storesResolvedArr);
+            } else {
+
+                return this.storesResolved;
+            }
+
+
+        }
+
         render(){
+
+            var props = this.composeProps();
+
+
+            console.log(['Wrapper', props]);
+            
+            
+/*
+
+ //serverTime={this.stores.globalStore.serverTime}
+ */
 
             return  <Component
             sum={this.store.sum}
             earn={this.store.earn}
+
+
             />
         }
     }
