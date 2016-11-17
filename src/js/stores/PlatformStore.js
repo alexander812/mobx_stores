@@ -1,5 +1,5 @@
 import { observable, action, computed, autorun, extendObservable } from 'mobx';
-import { mix } from 'util/utils';
+import { mix } from 'util/util';
 
 
 var actions = {
