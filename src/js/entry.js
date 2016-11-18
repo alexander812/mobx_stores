@@ -31,11 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
-
-
-
-    new SomeStore();
+    //new SomeStore();
 
 
 
