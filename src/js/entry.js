@@ -25,31 +25,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         constructor(){
-
-
-            setTimeout(()=>{
-                this.sum = 200;
-            }, 1000);
-
-
-
-            const disposer = observe(this, "sum", (newValue, oldValue) => {
+            observe(this, "sum", (newValue, oldValue) => {
                 this.sumPrev = oldValue;
             });
-
-
-
-
-
-
-            autorun(()=>{
-                console.log(['diff=', this.diff]);
-            });
-
-
-
         }
-
     }
 
 
