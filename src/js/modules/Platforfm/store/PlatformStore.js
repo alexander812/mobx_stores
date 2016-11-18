@@ -2,10 +2,11 @@ import { observable, action, computed, autorun, extendObservable, observe } from
 import { mix } from 'helper/util';
 import platformActions  from 'modules/Platforfm/action/platformActions';
 import globalStore  from 'stores/GlobalStore';
+import BaseStore  from 'helper/BaseStore';
 
 
 
-class PlatformStore{
+class PlatformStore extends BaseStore{
     @observable sum = 0;
     @observable winperc = 80;
     @observable hello = {
@@ -23,13 +24,17 @@ class PlatformStore{
     }
     
     constructor(){
-        this.sum = 1000;
-        
-        const disposer = observe(this, (change) => {
-            console.log('change', change);
-        });
+        super();
 
-        
+        this.sum = 1000;
+
+        this.addObserve(
+            observe(this, 'serverTime', (newValue, oldValue) => {
+                console.log('change', newValue, oldValue);
+            })
+        );
+
+
     }
 
 }
