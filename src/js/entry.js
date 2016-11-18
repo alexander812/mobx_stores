@@ -16,16 +16,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-
-
     class SomeStore{
         @observable sum = 100;
+        @observable sumPrev = 100;
 
         @computed get diff() {
-            //ideally I'd like to computed diff between old and new sum
-            //like: return this.sum - this.sum.old
-
-            return this.sum
+            return this.sum - this.sumPrev;
         }
 
         constructor(){
@@ -36,13 +32,26 @@ document.addEventListener("DOMContentLoaded", function() {
             }, 1000);
 
 
-            autorun(()=>{
-                console.log([this.diff]);
+
+            const disposer = observe(this, "sum", (newValue, oldValue) => {
+                this.sumPrev = oldValue;
             });
+
+
+
+
+
+
+            autorun(()=>{
+                console.log(['diff=', this.diff]);
+            });
+
+
 
         }
 
     }
+
 
 
 
