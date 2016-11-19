@@ -10,6 +10,10 @@ function Connector(Component, stores, options) {
             store:  React.PropTypes.object
         };
 
+        static contextTypes = {
+            store: React.PropTypes.object
+        };
+
         getChildContext() {
             return {
                 store: this.store
@@ -19,6 +23,10 @@ function Connector(Component, stores, options) {
         resolveStore(store){
 
             var resolved = typeof store === 'function' ? store.call(this) : store;
+            if(typeof store === 'function'){
+                this.toDestroy.push(resolved);
+            }
+
             this.storesResolved.push(resolved);
         }
 
@@ -28,15 +36,29 @@ function Connector(Component, stores, options) {
                     this.resolveStore(item);
                 });
             } else {
-                this.resolveStore(stores);
+                this.resolveStore(stores || this.context.store);
             }
         }
     
         componentWillMount(){
+            //TODO remove options, stores
+            this.toDestroy = [];
             this.options = options;
             this.storesResolved = [];
             this.resolveStores(stores);
             this.store = this.storesResolved[0];
+        }
+
+        componentWillUnmount(){
+            this.toDestroy.forEach((resolved)=>{
+                if(resolved.destroy){
+                    resolved.destroy();
+                }
+            });
+        }
+
+        shouldComponentUpdate(){
+            return false;
         }
 
         composeProps(){

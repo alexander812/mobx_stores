@@ -30,7 +30,7 @@ class PlatformStore extends BaseStore{
 
         this.addObserve(
             observe(this, 'serverTime', (newValue, oldValue) => {
-                console.log('change', newValue, oldValue);
+                //console.log('change', newValue, oldValue);
             })
         );
 
