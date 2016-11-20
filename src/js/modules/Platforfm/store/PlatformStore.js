@@ -7,6 +7,8 @@ import BaseStore  from 'helper/BaseStore';
 
 
 class PlatformStore extends BaseStore{
+
+    bindAs = 'Platform';
     @observable sum = 0;
     @observable winperc = 80;
     @observable hello = {
@@ -33,6 +35,8 @@ class PlatformStore extends BaseStore{
                 //console.log('change', newValue, oldValue);
             })
         );
+
+        console.log(['globalStore', globalStore]);
 
 
     }

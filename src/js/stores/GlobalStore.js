@@ -3,10 +3,12 @@ import { mix } from 'helper/util';
 
 class GlobalStore{
 
+
+
+    modules = {};
     userId = null;
     userName = null;
     @observable serverTime = new Date().getTime();
-
 
     constructor(){
 
@@ -17,7 +19,18 @@ class GlobalStore{
             this.serverTime = new Date().getTime();
         }, 1000);
 
+    }
 
+    bind(module){
+        if(module.bindAs && typeof module.bindAs === 'string'){
+            modules[module.bindAs] = module;
+        }
+    }
+
+    unbind(module){
+        if(module.bindAs && this.modules[module.bindAs]){
+            delete this.modules[module.bindAs];
+        }
     }
 
 }

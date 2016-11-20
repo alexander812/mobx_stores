@@ -1,4 +1,12 @@
+import globalStore from 'stores/GlobalStore';
+
 class BaseStore{
+
+    constructor(){
+        if(this.bindAs && typeof this.bindAs === 'string'){
+            globalStore.bind(this);
+        }
+    }
 
     disposers = [];
 
@@ -11,6 +19,10 @@ class BaseStore{
         this.disposers.forEach((obsr)=>{
             obsr();
         });
+
+        if(this.bindAs && typeof this.bindAs === 'string'){
+            globalStore.unbind(this);
+        }
 
     }
 }
