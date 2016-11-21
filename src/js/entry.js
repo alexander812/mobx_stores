@@ -4,8 +4,6 @@ import Platform from 'modules/Platforfm/Platform';
 import { observable, action, computed, autorun, extendObservable, observe } from 'mobx';
 
 
-import PlatformConnector from 'modules/Platforfm/PlatformConnector';
-
 document.addEventListener("DOMContentLoaded", function() {
 
 
@@ -13,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     document.querySelector('#action-mount').onclick = function(){
-        ReactDom.render(React.createElement(PlatformConnector), document.querySelector('#app-container'));
+        ReactDom.render(React.createElement(Platform), document.querySelector('#app-container'));
     };
 
     document.querySelector('#action-unmount').onclick = function(){

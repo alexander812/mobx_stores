@@ -41,7 +41,7 @@ export default Connector(
             sum:PlatformStore.sum,
             earn:PlatformStore.earn
         }
-        
+
     }
-        
+
 );

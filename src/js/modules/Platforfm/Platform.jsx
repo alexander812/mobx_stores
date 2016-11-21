@@ -1,87 +1,47 @@
 import React from 'react';
 import PlatformStore from 'modules/Platforfm/store/PlatformStore';
 import {observer, Provider} from 'mobx-react'
+import Connector from 'helper/Connector';
+//import globalStore from 'stores/GlobalStore';
+import ServerTime from 'modules/Platforfm/components/ServerTime';
+import BaseComponent from 'helper/react/BaseComponent';
 
+class Platform extends BaseComponent{
 
-@observer(["store"])
-class SomeComp extends React.Component{
-
-    act(v1, v2, v3, v4){
-
-        if(this.props.store && this.props.store[v1]){
-            this.props.store[v1](v2, v3, v4);
-        }
-    }
     render(){
-        
-        console.log(['SomeComp', this]);
+
+        //console.log(['Platform', this]);
 
         return <div>
 
             SomeComp:
             <br/>
-            sum:{this.props.store.sum}
+            Sum:{this.props.sum}
+            <br/>
+            Earn:{this.props.earn}
+            <br/>
+            <ServerTime/>
+            <br/>
 
-             <a href="javascript:;" onClick={(e)=>this.act('changeSum', e, 400)}>Click</a>
-
+            <a href="javascript:;" onClick={()=>this.act('changeSum', 400)}>Click</a>
         </div>
     }
 }
 
+export default Connector(
+    Platform,
+    [
+        function(){return new PlatformStore()}
+        //globalStore
+    ],
 
+    function(PlatformStore, globalStore){
 
-
-
-@observer(["store"])
-class Component extends React.Component{
-    render(){
-
-
-        console.log(['Component', this]);
-
-        return <div>Dummy component:
-            <br/>
-            sum:{this.props.store.sum}
-            <br/>
-            earn:
-            {this.props.store.earn}
-            <br/>
-            winperc:
-            {this.props.store.winperc}
-
-            <br/>
-
-             <a href="javascript:;" onClick={this.props.store.changeSum.bind(this.props.store, 500)}>Click</a>
-
-            <SomeComp/>
-
-
-        </div>
-    }
-}
-
-
-
-
-
-class Entry extends React.Component{
-    componentWillMount(){
-
-        this.store = new PlatformStore();
+        return {
+            sum:PlatformStore.sum,
+            earn:PlatformStore.earn
+        }
 
     }
-    componentWillUnmount(){
 
-    }
-    render(){
-
-        return  (<Provider
-            store={this.store}
-        >
-            <Component />
-        </Provider>)
-
-    }
-}
-
-export default Entry;
+);
