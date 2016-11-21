@@ -17,6 +17,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "events": "^1.1.1",
     "mobx": "^2.2.2",
     "mobx-react": "^3.3.1",
     "mobx-react-devtools": "^4.2.0",
