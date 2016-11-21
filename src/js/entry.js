@@ -9,7 +9,7 @@ import PlatformConnector from 'modules/Platforfm/PlatformConnector';
 document.addEventListener("DOMContentLoaded", function() {
 
 
-    ReactDom.render(React.createElement(PlatformConnector), document.querySelector('#app-container'));
+    //ReactDom.render(React.createElement(PlatformConnector), document.querySelector('#app-container'));
 
 
     document.querySelector('#action-mount').onclick = function(){

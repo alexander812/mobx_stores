@@ -8,18 +8,17 @@ import BaseStore  from 'helper/BaseStore';
 
 class PlatformStore extends BaseStore{
 
+
+
     bindAs = 'Platform';
+    testArr = [];
     @observable sum = 0;
     @observable winperc = 80;
-    @observable hello = {
-        v1:1,
-        v2:3
-    };
-
 
     @computed get serverTime() {
 
-        console.log(['computed get serverTime', globalStore.serverTime]);
+        //console.log(['computed get serverTime', globalStore.serverTime]);
+
         return globalStore.serverTime;
     }
 
@@ -37,6 +36,15 @@ class PlatformStore extends BaseStore{
                 //console.log('change', newValue, oldValue);
             })
         );
+
+
+        /*
+        var len = 100000;
+        this.testArr = new Array(len);
+        for(var i = 0; i < len; i ++){
+            this.testArr[i]  = new Date().toString()+i;
+        }
+        */
 
     }
 

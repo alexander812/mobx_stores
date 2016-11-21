@@ -2,7 +2,7 @@ import React from 'react';
 import PlatformStore from 'modules/Platforfm/store/PlatformStore';
 import {observer, Provider} from 'mobx-react'
 import Connector from 'helper/Connector';
-import globalStore from 'stores/GlobalStore';
+//import globalStore from 'stores/GlobalStore';
 import ServerTime from 'modules/Platforfm/components/ServerTime';
 import BaseComponent from 'helper/react/BaseComponent';
 
@@ -31,8 +31,8 @@ class Platform extends BaseComponent{
 export default Connector(
     Platform,
     [
-        function(){return new PlatformStore()},
-        globalStore
+        function(){return new PlatformStore()}
+        //globalStore
     ],
 
     function(PlatformStore, globalStore){
