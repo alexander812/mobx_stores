@@ -6,7 +6,7 @@ import Connector from 'helper/Connector';
 class ServerTime extends BaseComponent{
 
     render(){
-        console.log(['ServerTime', this, this.props]);
+        //console.log(['ServerTime', this, this.props]);
 
         return <div>
 

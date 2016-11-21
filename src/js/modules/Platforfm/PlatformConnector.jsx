@@ -10,7 +10,7 @@ class Platform extends BaseComponent{
 
     render(){
 
-        console.log(['Platform', this]);
+        //console.log(['Platform', this]);
 
         return <div>
 

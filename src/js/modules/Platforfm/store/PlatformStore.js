@@ -18,6 +18,8 @@ class PlatformStore extends BaseStore{
 
 
     @computed get serverTime() {
+
+        console.log(['computed get serverTime', globalStore.serverTime]);
         return globalStore.serverTime;
     }
 
@@ -35,9 +37,6 @@ class PlatformStore extends BaseStore{
                 //console.log('change', newValue, oldValue);
             })
         );
-
-        console.log(['globalStore', globalStore]);
-
 
     }
 

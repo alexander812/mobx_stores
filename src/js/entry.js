@@ -8,12 +8,23 @@ import PlatformConnector from 'modules/Platforfm/PlatformConnector';
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    //console.log(['PlatformConnector', PlatformConnector, Platform]);
 
     ReactDom.render(React.createElement(PlatformConnector), document.querySelector('#app-container'));
 
 
+    document.querySelector('#action-mount').onclick = function(){
+        ReactDom.render(React.createElement(PlatformConnector), document.querySelector('#app-container'));
+    };
 
+    document.querySelector('#action-unmount').onclick = function(){
+        ReactDom.unmountComponentAtNode(document.querySelector('#app-container'))
+    };
+
+
+    
+    
+
+    /*
 
 
     class SomeStore{
@@ -31,9 +42,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    //new SomeStore();
+    new SomeStore();
 
-
+*/
 
 
 });
