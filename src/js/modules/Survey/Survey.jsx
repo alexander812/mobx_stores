@@ -1,45 +1,44 @@
 import React from 'react';
-import PlatformStore from 'modules/Platforfm/store/PlatformStore';
 import {observer, Provider} from 'mobx-react'
 import Connector from 'helper/Connector';
-//import globalStore from 'stores/GlobalStore';
-import ServerTime from 'modules/Platforfm/components/ServerTime';
 import BaseComponent from 'helper/react/BaseComponent';
+import SurveyStore from 'modules/Survey/store/SurveyStore';
 
-class Platform extends BaseComponent{
+
+
+class Survey extends BaseComponent{
+
+
+    /*
+
+     {this.questions.map((item, i)=>{
+     return <li key={i}>{item.text}</li>
+     })}
+
+     */
 
     render(){
 
-        //console.log(['Platform', this]);
+        console.log(['Survey', this]);
 
-        return <div>
+        return <ul>
 
-            SomeComp:
-            <br/>
-            Sum:{this.props.sum}
-            <br/>
-            Earn:{this.props.earn}
-            <br/>
-            <ServerTime/>
-            <br/>
+   sddsfd
 
-            <a href="javascript:;" onClick={()=>this.act('changeSum', 400)}>Click</a>
-        </div>
+        </ul>
     }
 }
 
 export default Connector(
-    Platform,
-    [
-        function(){return new PlatformStore()}
-        //globalStore
-    ],
+    Survey,
 
-    function(PlatformStore, globalStore){
+    function(){return new SurveyStore()},
+
+    function(store){
 
         return {
-            sum:PlatformStore.sum,
-            earn:PlatformStore.earn
+            questions:store.questions,
+            question:store.question
         }
 
     }

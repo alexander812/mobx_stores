@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer, Provider} from 'mobx-react'
-
+import {toJS} from 'mobx'
 function Connector(Component, stores, options) {
 
 
@@ -65,7 +65,18 @@ function Connector(Component, stores, options) {
             var helper = typeof options === 'function' ? options : options.helper;
 
             if(helper){
-                return helper.apply(this, this.storesResolved);
+                var len = this.storesResolved.length;
+                var arg = new Array(len);
+                for(var i = 0; i < len; i ++){
+                    arg[i] = toJS(this.storesResolved[i]);
+                }
+
+
+                //console.log([1212, arg[0].questions]);
+                //toJS-
+                return helper.apply(this, arg);
+                //return helper.apply(this, this.storesResolved);
+
             } else {
                 return this.storesResolved;
             }

@@ -6,6 +6,8 @@ import Connector from 'helper/Connector';
 class ServerTime extends BaseComponent{
 
     render(){
+
+
         //console.log(['ServerTime', this, this.props]);
 
         return <div>
@@ -22,7 +24,8 @@ export default Connector(
     function(PlatformStore){
 
         return {
-            serverTime:PlatformStore.serverTime
+            serverTime:PlatformStore.serverTime,
+            questions:PlatformStore.questions
         }
         
     }

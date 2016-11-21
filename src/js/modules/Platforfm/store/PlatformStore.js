@@ -15,12 +15,35 @@ class PlatformStore extends BaseStore{
     @observable sum = 0;
     @observable winperc = 80;
 
+    @observable serverTime = 12121212;
+
+
+    @observable questions = [
+        {
+            id:1,
+            text:'Are you ready?',
+            selected:true,
+            result:false
+        },
+        {
+            id:2,
+            text:'Make sense?',
+            result:false
+        }
+    ];
+
+
+
+
+
+    /*
     @computed get serverTime() {
 
         //console.log(['computed get serverTime', globalStore.serverTime]);
 
         return globalStore.serverTime;
     }
+*/
 
     @computed get earn() {
         return Math.floor(this.sum / 100 * this.winperc);
@@ -36,6 +59,35 @@ class PlatformStore extends BaseStore{
                 //console.log('change', newValue, oldValue);
             })
         );
+
+
+
+
+
+
+
+
+
+
+/*
+        var t0 = performance.now();
+        this.iter = 0;
+
+        var dd = setInterval(()=>{
+
+            this.serverTime = this.iter;
+            this.iter++;
+
+            if( this.iter == 1000){
+                console.log("Call to doSomething took " + (performance.now() - t0) + " milliseconds.")
+                clearInterval(dd);
+            }
+
+        }, 1);
+
+
+*/
+
 
 
         /*
