@@ -41,6 +41,7 @@ observe(items, () => {
 
 class SurveyStore extends BaseStore{
 
+    bindAs = 'Survey';
 
     @observable questions = [
         {
@@ -62,10 +63,12 @@ class SurveyStore extends BaseStore{
         return _.find(this.questions, { 'selected': true });
     };
 
-    
+
     constructor(){
         super();
 
+        this.bind();
+        
         this.addObserve(
             observe(this, (newValue, oldValue) => {
                 console.log(['change', this.questions]);

@@ -9,6 +9,8 @@ import BaseStore  from 'helper/BaseStore';
 class PlatformStore extends BaseStore{
 
     bindAs = 'Platform';
+
+    @observable question;
     @observable sum = 0;
     @observable winperc = 80;
 
@@ -23,6 +25,11 @@ class PlatformStore extends BaseStore{
     
     constructor(){
         super();
+
+        this.bind({
+            'Survey.question':'question'
+        });
+
 
         this.sum = 1000;
 

@@ -1,13 +1,15 @@
 import { observable, action, computed, autorun } from 'mobx';
 import { mix } from 'helper/util';
+import GlobalBinder from 'stores/GlobalBinder';
 
 class GlobalStore{
 
 
 
-    modules = {};
+    
     userId = null;
     userName = null;
+    binder = new GlobalBinder();
     @observable serverTime = new Date().getTime();
 
     constructor(){
@@ -21,17 +23,7 @@ class GlobalStore{
 
     }
 
-    bind(module){
-        if(module.bindAs && typeof module.bindAs === 'string'){
-            modules[module.bindAs] = module;
-        }
-    }
 
-    unbind(module){
-        if(module.bindAs && this.modules[module.bindAs]){
-            delete this.modules[module.bindAs];
-        }
-    }
 
 }
 
