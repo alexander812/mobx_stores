@@ -1,8 +1,41 @@
-import { observable, action, computed, autorun, extendObservable, observe, toJS, asStructure } from 'mobx';
-import { mix } from 'helper/util';
-import surveyActions  from 'modules/Survey/action/surveyActions';
-import BaseStore  from 'helper/BaseStore';
-import _  from 'lodash';
+import {observable, action, computed, autorun, extendObservable, observe, toJS, asStructure} from "mobx";
+import {mix} from "helper/util";
+import BaseStore from "helper/BaseStore";
+import _ from "lodash";
+
+
+/*
+var items = observable([
+    {
+        id:1,
+        title:'Are you ready?'
+    },
+    {
+        id:2,
+        title:'Make sense?'
+    }
+]);
+
+
+setTimeout(()=>{
+    items[1].title = 'bla bla';
+}, 1000);
+
+
+
+observe(items, () => {
+
+    // here I get changed model and save to server, like below
+
+    ajax('/url',
+        {
+        id:1,
+        title:'bla bla'
+
+    });
+
+});
+*/
 
 
 
@@ -29,42 +62,15 @@ class SurveyStore extends BaseStore{
         return _.find(this.questions, { 'selected': true });
     };
 
+    
     constructor(){
         super();
 
-
-
-
-        /*
-        autorun(()=>{
-            console.log(['this.questions', this.questions[0]]);
-        });
-
-*/
-
-        /*
         this.addObserve(
-            observe(this, 'questions', (newValue, oldValue) => {
-                console.log(['change', arguments]);
+            observe(this, (newValue, oldValue) => {
+                console.log(['change', this.questions]);
             })
         );
-*/
-
-
-        /*
-        setTimeout(()=>{
-            console.log(['setTimeout']);
-
-            this.questions[1].selected = true;
-
-
-
-        }, 1000);
-
-*/
-
-
-
 
 
     }
@@ -91,7 +97,7 @@ class SurveyStore extends BaseStore{
         if(toSelect){
             toSelect.selected = true;
         }
-        if(selected){
+        if(selected !== toSelect){
             selected.selected = false;
         }
 

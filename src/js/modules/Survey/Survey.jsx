@@ -12,7 +12,10 @@ class Survey extends BaseComponent {
 
         console.log(['Survey', this]);
 
-        return <ul>
+        return<div>
+            <h4>{this.props.question.text}</h4>
+
+        <ul>
 
             {
                 this.props.questions.map((item)=> {
@@ -20,6 +23,7 @@ class Survey extends BaseComponent {
                 })
             }
         </ul>
+        </div>
     }
 }
 
