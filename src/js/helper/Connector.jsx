@@ -1,6 +1,8 @@
 import React from 'react';
 import {observer, Provider} from 'mobx-react'
 import {toJS} from 'mobx'
+import _  from 'lodash';
+
 function Connector(Component, stores, options) {
 
 
@@ -62,25 +64,22 @@ function Connector(Component, stores, options) {
         }
 
         composeProps(){
+            var composed, result = {};
             var helper = typeof options === 'function' ? options : options.helper;
 
             if(helper){
-                var len = this.storesResolved.length;
-                var arg = new Array(len);
-                for(var i = 0; i < len; i ++){
-                    arg[i] = toJS(this.storesResolved[i]);
-                }
 
+                composed = helper.apply(this, this.storesResolved);
 
-                //console.log([1212, arg[0].questions]);
-                //toJS-
-                return helper.apply(this, arg);
-                //return helper.apply(this, this.storesResolved);
+                _.forIn(composed, function(item, key) {
+                    result[key] = toJS(item);
+                });
+
+                return result;
 
             } else {
                 return this.storesResolved;
             }
-
         }
 
         render(){

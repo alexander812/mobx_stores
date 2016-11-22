@@ -10,7 +10,7 @@ import { observable, action, computed, autorun, extendObservable, observe } from
 document.addEventListener("DOMContentLoaded", function() {
 
 
-    //ReactDom.render(React.createElement(Platform), document.querySelector('#platform-container'));
+    ReactDom.render(React.createElement(Platform), document.querySelector('#platform-container'));
     ReactDom.render(React.createElement(Survey), document.querySelector('#survey-container'));
 
 
