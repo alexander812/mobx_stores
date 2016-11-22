@@ -5,42 +5,35 @@ import BaseComponent from 'helper/react/BaseComponent';
 import SurveyStore from 'modules/Survey/store/SurveyStore';
 
 
+class Survey extends BaseComponent {
 
-class Survey extends BaseComponent{
-
-
-    /*
-
-     {this.questions.map((item, i)=>{
-     return <li key={i}>{item.text}</li>
-     })}
-
-     */
-
-    render(){
+    
+    render() {
 
         console.log(['Survey', this]);
 
         return <ul>
 
-   sddsfd
-
+            {
+                this.props.questions.map((item)=> {
+                    return <li key={item.id}>{item.selected ? '!' : ''}{item.text} <a href="javascript:;" onClick={()=>this.act('selectAnswer', item.id)}>select</a> <a href="javascript:;" onClick={()=>this.act('answer', item.id)}>answer</a></li>
+                })
+            }
         </ul>
     }
 }
 
-export default Connector(
-    Survey,
+export default Connector(Survey,
 
-    function(){return new SurveyStore()},
+    function () {
+        return new SurveyStore()
+    },
 
-    function(store){
+    function (store) {
 
         return {
-            questions:store.questions,
-            question:store.question
+            questions: store.questions,
+            question : store.question
         }
 
-    }
-
-);
+    });
