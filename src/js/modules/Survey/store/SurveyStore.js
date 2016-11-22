@@ -72,7 +72,8 @@ class SurveyStore extends BaseStore{
     
     @action answer (answerId) {
 
-        console.log(['answer', answerId]);
+        this.selectAnswer(answerId);
+
 
         var ans = _.find(this.questions, { 'id': answerId });
 
@@ -84,11 +85,8 @@ class SurveyStore extends BaseStore{
 
     @action selectAnswer (answerId) {
 
-
-        /*
         var selected = _.find(this.questions, { 'selected': true });
         var toSelect = _.find(this.questions, { 'id': answerId });
-
 
         if(toSelect){
             toSelect.selected = true;
@@ -96,22 +94,6 @@ class SurveyStore extends BaseStore{
         if(selected){
             selected.selected = false;
         }
-    */
-
-
-
-
-        var selected = _.find(this.questions, { 'selected': true });
-        var current = _.find(this.questions, { 'id': answerId });
-
-        if(selected){
-            selected.selected = false;
-        }
-        if(current){
-            selected.selected = true;
-        }
-
-
 
     }
 

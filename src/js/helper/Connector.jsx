@@ -75,8 +75,8 @@ function Connector(Component, stores, options) {
                     result[key] = toJS(item);
                 });
 
-                //return result;
-                return composed;
+                return result;
+                //return composed;
 
             } else {
                 return this.storesResolved;
