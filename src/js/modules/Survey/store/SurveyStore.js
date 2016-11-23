@@ -4,41 +4,6 @@ import BaseStore from "helper/BaseStore";
 import _ from "lodash";
 
 
-/*
-var items = observable([
-    {
-        id:1,
-        title:'Are you ready?'
-    },
-    {
-        id:2,
-        title:'Make sense?'
-    }
-]);
-
-
-setTimeout(()=>{
-    items[1].title = 'bla bla';
-}, 1000);
-
-
-
-observe(items, () => {
-
-    // here I get changed model and save to server, like below
-
-    ajax('/url',
-        {
-        id:1,
-        title:'bla bla'
-
-    });
-
-});
-*/
-
-
-
 class SurveyStore extends BaseStore{
 
     bindAs = 'Survey';

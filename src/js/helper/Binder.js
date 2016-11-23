@@ -23,7 +23,6 @@ class Binder{
         if(typeof item === 'function'){
             item.call(module, toJS(value));
         } else {
-           console.log(['toJS(value)', toJS(value)]);
             module[item] = toJS(value);
         }
     }
