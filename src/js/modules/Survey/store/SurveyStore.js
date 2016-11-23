@@ -68,13 +68,15 @@ class SurveyStore extends BaseStore{
         super();
 
         this.bind();
-        
+
+
+        /*
         this.addObserve(
             observe(this, (newValue, oldValue) => {
-                console.log(['change', this.questions]);
+                console.log(['change', this.question]);
             })
         );
-
+*/
 
     }
 

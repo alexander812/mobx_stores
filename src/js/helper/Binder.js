@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {observe} from "mobx";
+import {observe, toJS} from "mobx";
 
 class Binder{
 
@@ -18,6 +18,15 @@ class Binder{
         return this.modules[bindAs];
     }
 
+    triggerValue(module, item, value){
+
+        if(typeof item === 'function'){
+            item.call(module, toJS(value));
+        } else {
+           console.log(['toJS(value)', toJS(value)]);
+            module[item] = toJS(value);
+        }
+    }
 
     process(m){
 
@@ -40,18 +49,14 @@ class Binder{
                 targetObject.waitFor.push(bindAs);
 
             } else if(targetPath[1]){
+
+                this.triggerValue(m.module, item, targetModule[targetPath[1]]);
+
                 m.disposers.push(
+
                     observe(targetModule, targetPath[1], ()=>{
 
-                        /*
-                         if(typeof item === 'function'){
-                         item.call(targetModule[targetPath[1]]);
-                         } else {
-                         m.module[item] = targetModule[targetPath[1]];
-                         console.log([111, targetModule[targetPath[1]]]);
-                         }
-
-                         */
+                        this.triggerValue(m.module, item, targetModule[targetPath[1]]);
 
                     })
                 );
@@ -89,7 +94,7 @@ class Binder{
                 m.waitFor.forEach((item)=>{
                     var targetObject = this.getModule(item);
                     if(targetObject.module){
-                        console.log(['targetObject', targetObject]);
+                        //console.log(['targetObject', targetObject]);
                         this.process(targetObject);
                     }
 

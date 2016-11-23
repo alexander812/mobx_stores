@@ -1,4 +1,4 @@
-import { observable, action, computed, autorun, extendObservable, observe } from 'mobx';
+import { observable, action, computed, autorun, extendObservable, observe, toJS } from 'mobx';
 import { mix } from 'helper/util';
 import platformActions  from 'modules/Platforfm/action/platformActions';
 import globalStore  from 'stores/GlobalStore';
@@ -18,7 +18,6 @@ class PlatformStore extends BaseStore{
         return globalStore.serverTime;
     }
 
-
     @computed get earn() {
         return Math.floor(this.sum / 100 * this.winperc);
     }
@@ -34,45 +33,10 @@ class PlatformStore extends BaseStore{
         this.sum = 1000;
 
         this.addObserve(
-            observe(this, 'serverTime', (newValue, oldValue) => {
-                //console.log('change', newValue, oldValue);
+            observe(this, 'question', (newValue, oldValue) => {
+                console.log('change question', toJS(this.question));
             })
         );
-
-
-
-
-
-
-        
-/*
-        var t0 = performance.now();
-        this.iter = 0;
-
-        var dd = setInterval(()=>{
-
-            this.serverTime = this.iter;
-            this.iter++;
-
-            if( this.iter == 1000){
-                console.log("Call to doSomething took " + (performance.now() - t0) + " milliseconds.")
-                clearInterval(dd);
-            }
-
-        }, 1);
-
-
-*/
-
-
-
-        /*
-        var len = 100000;
-        this.testArr = new Array(len);
-        for(var i = 0; i < len; i ++){
-            this.testArr[i]  = new Date().toString()+i;
-        }
-        */
 
     }
 
