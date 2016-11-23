@@ -93,7 +93,6 @@ class Binder{
                 m.waitFor.forEach((item)=>{
                     var targetObject = this.getModule(item);
                     if(targetObject.module){
-                        //console.log(['targetObject', targetObject]);
                         this.process(targetObject);
                     }
 
