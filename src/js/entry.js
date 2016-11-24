@@ -2,6 +2,7 @@ import ReactDom from 'react-dom';
 import React from 'react';
 import Platform from 'modules/Platforfm/Platform';
 import Survey from 'modules/Survey/Survey';
+import DummyStore from 'modules/Dummy/store/DummyStore';
 import { observable, action, computed, autorun, extendObservable, observe } from 'mobx';
 
 
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ReactDom.render(React.createElement(Survey), document.querySelector('#survey-container'));
 
 
+var dummyStore = new DummyStore();
 
     /*
     document.querySelector('#action-mount').onclick = function(){

@@ -26,8 +26,10 @@ class PlatformStore extends BaseStore{
         super();
 
         this.bind({
-            'Survey.question':function(value){
-                console.log(['value', value]);
+            Survey:{
+                question:function(value){
+                    console.log(['value', value]);
+                }
             }
         });
 

@@ -2,127 +2,105 @@ import _ from "lodash";
 import {observe, toJS} from "mobx";
 
 class Binder{
+    stores ={};
+    storeExample = {
+        linkedStores:[],
+        store:null,
+        bindAs:'',
+        bindData:null,
+        disposers:{},
+        active: false
+    };
 
-    modules = {};
-    moduleVars = {};
-    waitFor = {};
-    disposers = {};
+    initialize(){
 
-
-    getPath(path){
-        this.moduleVars[path] = this.moduleVars[path] || path.split('.');
-        return this.moduleVars[path];
+        _.forEach(this.stores, (store)=>{
+            Object.assign(store, this.storeExample);
+        });
     }
 
-    getModule(bindAs){
-        return this.modules[bindAs];
-    }
 
-    triggerValue(module, item, value){
+    bind(store, bindData){
+        var bindAs = store.bindAs;
+        var otherStore;
+        var settings = this.stores[store.bindAs];
 
-        if(typeof item === 'function'){
-            item.call(module, toJS(value));
-        } else {
-            module[item] = toJS(value);
+        if(!settings){
+            console.error(`bindAs "${bindAs}" from "${Object.getPrototypeOf(store).constructor.name}" not registered in ${Object.getPrototypeOf(this).constructor.name}`);
+            return false;
         }
-    }
 
-    process(m){
+        settings.store = store;
+        settings.bindData = bindData;
+        settings.active = true;
 
-        var bindData = m.bindData;
-        var bindAs = m.bindAs;
+        _.forEach(bindData, (vars, otherStoreName)=>{
 
-        _.forEach( bindData, (item, key)=>{
-
-            var targetPath = this.getPath(key);
-            var targetObject = this.getModule(targetPath[0]);
-            var targetModule = targetObject.module;
-
-
-            if(!targetModule){
-
-                if(!targetObject.waitFor){
-                    targetObject.waitFor = [];
-                }
-
-                targetObject.waitFor.push(bindAs);
-
-            } else if(targetPath[1]){
-
-                this.triggerValue(m.module, item, targetModule[targetPath[1]]);
-
-                m.disposers.push(
-
-                    observe(targetModule, targetPath[1], ()=>{
-
-                        this.triggerValue(m.module, item, targetModule[targetPath[1]]);
-
-                    })
-                );
-
-
+            otherStore = this.stores[otherStoreName];
+            if(!otherStore){
+                //error
+                return;
             }
 
+            if(!_.includes( otherStore.linkedStores, bindAs)){
+                otherStore.linkedStores.push(bindAs);
+            }
 
-
+            this.processObserve(otherStoreName);
         });
 
     }
 
-    bind(module, bindData){
-        var m, bindAs = module.bindAs;
+    processObserve(storeName){
 
+        var settings = this.stores[storeName];
+        var handlers = {};
 
-        if(bindAs && this.modules[bindAs]){
-
-            m = this.modules[bindAs];
-
-            Object.assign( m,
-                {
-                    module:module,
-                    bindAs:bindAs,
-                    bindData:bindData,
-                    disposers:[]
-                }
-            );
-
-
-            this.process(m, bindData);
-
-            if(m.waitFor && m.waitFor.length){
-                m.waitFor.forEach((item)=>{
-                    var targetObject = this.getModule(item);
-                    if(targetObject.module){
-                        this.process(targetObject);
-                    }
-
-
-                });
-
-
-
-
-            }
-
-
-
-/*
-
-            console.log([this.modules, bindAs, this.modules]);
-            if(this.waitFor[bindAs]){
-
-                console.log(['getModule', this.waitFor[bindAs], this.getModule(this.waitFor[bindAs])]);
-
-                //this.process(this.modules[bindAs], bindData);
-            }
-*/
-
-        } else {
-            console.error(`bindAs "${bindAs}" from "${Object.getPrototypeOf(module).constructor.name}" not registered in ${Object.getPrototypeOf(this).constructor.name}`);
+        if(!settings){
+            console.error(`bindAs "${bindAs}" from "${Object.getPrototypeOf(store).constructor.name}" not registered in ${Object.getPrototypeOf(this).constructor.name}`);
+            return false;
         }
 
-        
+        settings.linkedStores.forEach((linkedStoreName)=>{
+
+            var bindedVars, linkedStoreSettings = this.stores[linkedStoreName];
+
+            if(!linkedStoreSettings || !linkedStoreSettings.active){
+                return false;
+            }
+
+            bindedVars = linkedStoreSettings.bindData[storeName];
+            if(!bindedVars){
+                return false;
+            }
+
+            _.forEach(bindedVars, (handler, varName)=>{
+
+                var o = {
+                    handler,
+                    store:linkedStoreSettings.store
+                };
+
+                if(!handlers[varName]){
+                    handlers[varName] = [o]
+                } else {
+                    handlers[varName].push(o);
+                }
+
+
+            });
+
+
+        });
+
+
+        console.log(['handlers', handlers]);
+
+
+
+
     }
+
 
     unbind(module){
         if(module.bindAs && this.modules[module.bindAs]){

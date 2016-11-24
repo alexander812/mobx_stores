@@ -28,6 +28,12 @@ class SurveyStore extends BaseStore{
         return _.find(this.questions, { 'selected': true });
     };
 
+    @computed get questionAsked(){
+        return _.find(this.questions, { 'result': true });
+    };
+
+
+
 
     constructor(){
         super();
