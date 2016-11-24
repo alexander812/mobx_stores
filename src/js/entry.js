@@ -4,8 +4,7 @@ import Platform from 'modules/Platforfm/Platform';
 import Survey from 'modules/Survey/Survey';
 import DummyStore from 'modules/Dummy/store/DummyStore';
 import { observable, action, computed, autorun, extendObservable, observe } from 'mobx';
-
-
+import {checkNestedObject} from "helper/util";
 
 
 document.addEventListener("DOMContentLoaded", function() {
