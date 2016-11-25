@@ -9,12 +9,13 @@ import {checkNestedObject} from "helper/util";
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    var dummyStore = new DummyStore();
 
     ReactDom.render(React.createElement(Platform), document.querySelector('#platform-container'));
     ReactDom.render(React.createElement(Survey), document.querySelector('#survey-container'));
 
 
-var dummyStore = new DummyStore();
+
 
     /*
     document.querySelector('#action-mount').onclick = function(){

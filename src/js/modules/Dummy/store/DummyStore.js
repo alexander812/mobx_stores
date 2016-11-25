@@ -26,9 +26,7 @@ class DummyStore extends BaseStore{
 
         this.bind({
             Survey:{
-                question:function(value){
-                    console.log(['DummyStore value', value]);
-                },
+                question:'question',
                 questionAsked:'questionAsked'
             }
         });
