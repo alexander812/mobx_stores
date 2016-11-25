@@ -18,14 +18,26 @@ class DummyStore extends BaseStore{
     constructor(){
         super();
 
+        this.addObserve(
+            observe(this, 'question', (newValue, oldValue) => {
+                console.log('DummyStore, question =', toJS(this.question));
+            })
+        );
+
         this.bind({
             Survey:{
                 question:function(value){
-                    console.log(['value', value]);
+                    console.log(['DummyStore value', value]);
                 },
                 questionAsked:'questionAsked'
             }
         });
+
+
+
+
+
+
         
     }
 }

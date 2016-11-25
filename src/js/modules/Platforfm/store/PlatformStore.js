@@ -25,10 +25,17 @@ class PlatformStore extends BaseStore{
     constructor(){
         super();
 
+
+        this.addObserve(
+            observe(this, 'question', (newValue, oldValue) => {
+                console.log('PlatformStore question', toJS(this.question));
+            })
+        );
+
         this.bind({
             Survey:{
                 question:function(value){
-                    console.log(['value', value]);
+                    console.log(['PlatformStore value', value]);
                 }
             }
         });
@@ -36,11 +43,7 @@ class PlatformStore extends BaseStore{
 
         this.sum = 1000;
 
-        this.addObserve(
-            observe(this, 'question', (newValue, oldValue) => {
-                console.log('change question', toJS(this.question));
-            })
-        );
+
 
     }
 
