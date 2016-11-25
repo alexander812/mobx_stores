@@ -2,6 +2,9 @@ import _ from "lodash";
 import {getNestedObject} from "helper/util";
 import {observe, toJS} from "mobx";
 
+const ON_BIND_EVENT = 'onBind';
+const ON_UNBIND_EVENT = 'onUnbind';
+
 class Binder{
     stores ={};
 
@@ -37,6 +40,7 @@ class Binder{
         storeSettings.bindData = bindData;
         storeSettings.active = true;
 
+        //import vars from other stores
         _.forEach(bindData, (vars, otherStoreSettingsName)=>{
 
             otherStoreSettings = this.stores[otherStoreSettingsName];
@@ -47,12 +51,19 @@ class Binder{
             }
             _.forEach(vars, (handler, varName)=>{
 
-                this.addObserve(otherStoreSettings, storeSettings, varName);
+                //trigger 'onBind' action
+                if(varName === ON_BIND_EVENT || varName === ON_UNBIND_EVENT){
+                    if(varName === 'onBind' && typeof handler === 'function' && otherStoreSettings.active){
+                        handler.call(store, 'wasBind');
+                    }
+                    return;
+                }
 
+                this.addObserve(otherStoreSettings, storeSettings, varName);
             });
         });
 
-        //if other stores export vars from this store
+        //export vars to other store
         _.forEach(storeSettings.exportVars, (varSettings, varName)=>{
             var done = {};
             if(varSettings.storeNames.length){
@@ -100,9 +111,7 @@ class Binder{
 
         var handlers = [];
         var varSettings = otherStoreSettings.exportVars[varName];
-
-
-
+        
         if(varSettings.disposer){
             varSettings.disposer();
         }

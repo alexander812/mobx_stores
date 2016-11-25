@@ -4,8 +4,6 @@ import platformActions  from 'modules/Platforfm/action/platformActions';
 import globalStore  from 'stores/GlobalStore';
 import BaseStore  from 'helper/BaseStore';
 
-
-
 class PlatformStore extends BaseStore{
 
     bindAs = 'Platform';
@@ -40,18 +38,12 @@ class PlatformStore extends BaseStore{
             }
         });
 
-
         this.sum = 1000;
-
-
 
     }
 
 }
 
-
 mix( PlatformStore.prototype, platformActions );
-
-
 
 export default PlatformStore
