@@ -22,6 +22,11 @@ class Binder{
 
     }
 
+    isStore(storeName){
+        var s = this.stores[storeName];
+        return s && s.active;
+    }
+
     bind(store, bindData){
 
         var bindAs = store.bindAs;
@@ -54,12 +59,12 @@ class Binder{
                     return;
                 }
 
-                this.addObserve(otherStoreSettings, storeSettings, varName);
+                this._addObserve(otherStoreSettings, storeSettings, varName);
             });
         });
 
         //notify bind stores that required store bind;
-        this.notifyStores(bindAs, this.getBindStores(bindAs), ON_BIND_EVENT);
+        this._notifyStores(bindAs, this._getBindStores(bindAs), ON_BIND_EVENT);
 
         //export vars to other store
         _.forEach(storeSettings.exportVars, (varSettings, varName)=>{
@@ -69,23 +74,21 @@ class Binder{
                 varSettings.storeNames.forEach((stroreName)=>{
 
                     if(this.stores[stroreName].active && !done[varName]){
-                        this.addObserveDo(storeSettings, varName);
+                        this._addObserveDo(storeSettings, varName);
                         done[varName] = 1;
                     }
                 });
             }
         });
     }
-    isStore(storeName){
-        var s = this.stores[storeName];
-        return s && s.active;
-    }
+
     get(storeName, varName){
         var s = this.stores[storeName];
         if(s && s.active){
             return toJS(s.store[varName]);
         }
     }
+
     act(storeName, actionName, ...arg){
 
         var s = this.stores[storeName];
@@ -93,7 +96,32 @@ class Binder{
             return s.store[actionName].apply(s.store, arg);
         }
     }
-    getBindStores(storeName){
+
+    unbind(store){
+        if(!store || typeof store.bindAs !== 'string'){
+            return false;
+        }
+
+        var bindAs = store.bindAs;
+        var s = this.stores[bindAs];
+        var eventHandlers = this._getBindStores(bindAs);
+
+        if(s.active){
+            _.forEach(s.exportVars, (varSettings)=>{
+                varSettings.disposer && varSettings.disposer();
+            });
+
+            s.exportVars = {};
+
+            s.active = false;
+            s.store = null;
+            s.bindData = null;
+
+            this._notifyStores(bindAs, eventHandlers, ON_UNBIND_EVENT);
+
+        }
+    }
+    _getBindStores(storeName){
 
         var storeSettings = this.stores[storeName];
         var bindStoreHash = {};
@@ -108,7 +136,7 @@ class Binder{
         return _.keys(bindStoreHash);
     }
 
-    addObserve(otherStoreSettings, storeSettings, varName){
+    _addObserve(otherStoreSettings, storeSettings, varName){
 
         var flag = false;
 
@@ -131,11 +159,11 @@ class Binder{
 
         if(flag && otherStoreSettings.active){
 
-            this.addObserveDo(otherStoreSettings, varName);
+            this._addObserveDo(otherStoreSettings, varName);
         }
     }
 
-    addObserveDo(otherStoreSettings, varName){
+    _addObserveDo(otherStoreSettings, varName){
 
         var handlers = [];
         var varSettings = otherStoreSettings.exportVars[varName];
@@ -144,15 +172,15 @@ class Binder{
             varSettings.disposer();
         }
 
-        handlers = this.getHandlers(otherStoreSettings, varName);
-        this.setByHandlers(handlers, otherStoreSettings.store, varName);
+        handlers = this._getHandlers(otherStoreSettings, varName);
+        this._setByHandlers(handlers, otherStoreSettings.store, varName);
 
         varSettings.disposer = observe(otherStoreSettings.store, varName, () => {
-            this.setByHandlers(handlers, otherStoreSettings.store, varName);
+            this._setByHandlers(handlers, otherStoreSettings.store, varName);
         });
     }
 
-    getHandlers(otherStoreSettings, varName){
+    _getHandlers(otherStoreSettings, varName){
         var storeNames = otherStoreSettings.exportVars[varName].storeNames;
         var handlers = [];
 
@@ -175,7 +203,7 @@ class Binder{
         return handlers;
     }
 
-    setByHandlers(handlers, otherStore, varName){
+    _setByHandlers(handlers, otherStore, varName){
 
         var v = toJS(otherStore[varName]);
 
@@ -189,7 +217,7 @@ class Binder{
         });
     }
 
-    notifyStores(bindAs, handlers, eventName){
+    _notifyStores(bindAs, handlers, eventName){
         handlers.forEach((bindStoreName)=>{
             var bindStoreSettings = this.stores[bindStoreName];
             var handler = getNestedObject(bindStoreSettings, 'bindData', bindAs,  eventName);
@@ -197,31 +225,6 @@ class Binder{
                 handler();
             }
         })
-    }
-
-    unbind(store){
-        if(!store || typeof store.bindAs !== 'string'){
-            return false;
-        }
-
-        var bindAs = store.bindAs;
-        var s = this.stores[bindAs];
-        var eventHandlers = this.getBindStores(bindAs);
-
-        if(s.active){
-            _.forEach(s.exportVars, (varSettings)=>{
-                varSettings.disposer && varSettings.disposer();
-            });
-
-            s.exportVars = {};
-
-            s.active = false;
-            s.store = null;
-            s.bindData = null;
-
-            this.notifyStores(bindAs, eventHandlers, ON_UNBIND_EVENT);
-
-        }
     }
 }
 
