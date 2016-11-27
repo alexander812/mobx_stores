@@ -7,6 +7,20 @@ import SurveyStore from 'modules/Survey/store/SurveyStore';
 
 class Survey extends BaseComponent {
 
+
+    componentDidMount(){
+
+
+
+
+
+        setTimeout(function(){
+
+            //this.context.store.unbind();
+
+
+        }.bind(this), 5000);
+    }
     
     render() {
 

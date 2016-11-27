@@ -2,6 +2,7 @@ import {observable, action, computed, autorun, extendObservable, observe, toJS, 
 import {mix} from "helper/util";
 import BaseStore from "helper/BaseStore";
 import _ from "lodash";
+import surveyActions from "modules/Survey/action/surveyActions";
 
 
 class SurveyStore extends BaseStore{
@@ -52,35 +53,10 @@ class SurveyStore extends BaseStore{
     }
 
     
-    @action answer (answerId) {
 
-        this.selectAnswer(answerId);
-
-
-        var ans = _.find(this.questions, { 'id': answerId });
-
-        if(ans){
-            ans.result = true;
-        }
-
-    }
-
-    @action selectAnswer (answerId) {
-
-        var selected = _.find(this.questions, { 'selected': true });
-        var toSelect = _.find(this.questions, { 'id': answerId });
-
-        if(toSelect){
-            toSelect.selected = true;
-        }
-        if(selected !== toSelect){
-            selected.selected = false;
-        }
-
-    }
 
 }
 
-//mix( SurveyStore.prototype, surveyActions );
+mix( SurveyStore.prototype, surveyActions );
 
 export default SurveyStore

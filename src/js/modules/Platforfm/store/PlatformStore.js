@@ -3,6 +3,7 @@ import { mix } from 'helper/util';
 import platformActions  from 'modules/Platforfm/action/platformActions';
 import globalStore  from 'stores/GlobalStore';
 import BaseStore  from 'helper/BaseStore';
+import {ON_BIND_EVENT, ON_UNBIND_EVENT} from "constants/common";
 
 class PlatformStore extends BaseStore{
 
@@ -26,17 +27,26 @@ class PlatformStore extends BaseStore{
 
         this.addObserve(
             observe(this, 'question', (newValue, oldValue) => {
-                console.log('PlatformStore question', toJS(this.question));
+                //console.log('PlatformStore question', toJS(this.question));
             })
         );
 
         this.bind({
             Survey:{
+                [ON_BIND_EVENT]:()=>{
+                    console.log(['PlatformStore:'+ON_BIND_EVENT, this]);
+                },
+                [ON_UNBIND_EVENT]:()=>{
+                    console.log(['PlatformStore:'+ON_UNBIND_EVENT, this]);
+                },
                 question:function(value){
-                    console.log(['PlatformStore value', value]);
+                   // console.log(['PlatformStore value', value]);
                 }
             }
         });
+
+        
+
 
         this.sum = 1000;
 
