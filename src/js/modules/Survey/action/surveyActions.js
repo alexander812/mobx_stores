@@ -16,7 +16,6 @@ var actions = {
         }
 
     },
-
     @action selectAnswer (answerId) {
 
         var selected = _.find(this.questions, { 'selected': true });

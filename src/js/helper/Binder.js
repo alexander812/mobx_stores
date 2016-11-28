@@ -19,20 +19,32 @@ class Binder{
                 },
                 {bindAs:storeName});
         });
-
     }
 
-    isStore(storeName){
+    /**
+     * Проверяет привязан ли стор к биндеру
+     * @public
+     * @param {string} storeName
+     * @returns {*|boolean}
+     */
+    isStore(storeName = ''){
         var s = this.stores[storeName];
         return s && s.active;
     }
 
+    /**
+     * Привязывает стор к биндеру
+     * @public
+     * @param {object} store
+     * @param {object} bindData
+     */
     bind(store, bindData){
 
         var bindAs = store.bindAs;
-        //console.log(['bindAs', bindAs]);
         var otherStoreSettings;
         var storeSettings = this.stores[store.bindAs];
+
+        this.unbind(bindAs);
 
         if(!storeSettings){
             console.error(`bindAs "${bindAs}" from "${Object.getPrototypeOf(store).constructor.name}" not registered in ${Object.getPrototypeOf(this).constructor.name}`);
@@ -82,6 +94,13 @@ class Binder{
         });
     }
 
+    /**
+     * Отдаёт значение переменной из стора, привязанного к биндеру
+     * @public
+     * @param {string} storeName
+     * @param {string} varName
+     * @returns {mixed}
+     */
     get(storeName, varName){
         var s = this.stores[storeName];
         if(s && s.active){
@@ -89,14 +108,26 @@ class Binder{
         }
     }
 
+    /**
+     * Вызвает экшн стора с параметрами
+     * @public
+     * @param {string} storeName
+     * @param {string} actionName
+     * @param {array} arg
+     */
     act(storeName, actionName, ...arg){
 
         var s = this.stores[storeName];
         if(s && s.active){
-            return s.store[actionName].apply(s.store, arg);
+            s.store[actionName].apply(s.store, arg);
         }
     }
 
+    /**
+     * Отвязывает стор от биндера
+     * @public
+     * @param {object} store
+     */
     unbind(store){
         if(!store || typeof store.bindAs !== 'string'){
             return false;
@@ -111,7 +142,7 @@ class Binder{
                 varSettings.disposer && varSettings.disposer();
             });
 
-            s.exportVars = {};
+            //s.exportVars = {};
 
             s.active = false;
             s.store = null;
@@ -121,6 +152,7 @@ class Binder{
 
         }
     }
+
     _getBindStores(storeName){
 
         var storeSettings = this.stores[storeName];
