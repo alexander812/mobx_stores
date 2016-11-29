@@ -43,7 +43,9 @@ export function getNestedObject(...args) {
     return pass ? res : false;
 }
 
-
+export function protoName(object) {
+    return Object.getPrototypeOf(object).constructor.name
+}
 
 
 

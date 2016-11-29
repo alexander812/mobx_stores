@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {getNestedObject} from "helper/util";
+import {getNestedObject, protoName} from "helper/util";
 import {observe, toJS} from "mobx";
 import {ON_BIND_EVENT, ON_UNBIND_EVENT} from "constants/common";
 
@@ -47,7 +47,7 @@ class Binder{
         this.unbind(bindAs);
 
         if(!storeSettings){
-            console.error(`bindAs "${bindAs}" from "${Object.getPrototypeOf(store).constructor.name}" not registered in ${Object.getPrototypeOf(this).constructor.name}`);
+            console.error(`bindAs "${bindAs}" from "${protoName(store)}" not registered in ${protoName(this)}`);
             return false;
         }
 

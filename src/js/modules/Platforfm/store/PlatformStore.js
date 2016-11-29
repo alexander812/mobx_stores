@@ -26,11 +26,13 @@ class PlatformStore extends BaseStore{
 
 
         this.addObserve(
-            observe(this, 'question', (newValue, oldValue) => {
-                //console.log('PlatformStore question', toJS(this.question));
-            })
+            observe(this, 'serverTime', (newValue, oldValue) => {
+                console.log('PlatformStore serverTime', toJS(this.serverTime));
+            }),
+            'serverTime'
         );
 
+        
         this.bind({
             Survey:{
                 [ON_BIND_EVENT]:()=>{
