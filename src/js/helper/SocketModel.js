@@ -29,18 +29,26 @@ class RequestModel {
             this._setRequest(req);
         }
         this.socket._send(this);
-
     }
 
     onResponse(f){
         this.callback['response'] = f;
         this.socket.requestsHash['response'].push(this);
         return this;
-
     }
 
     onFail(f){
         this.callback['fail'] = f;
+        return this;
+    }
+
+    onClose(f){
+        this.callback['close'] = f;
+        return this;
+    }
+
+    onOpen(f){
+        this.callback['open'] = f;
         return this;
     }
 
@@ -88,7 +96,7 @@ class RequestModel {
             }
         }
         //удалить при первом респонсе
-        if(!this.callback.push && !this.callback.response && !this.callback.fail){
+        if(!this.callback.push && !this.callback.response && !this.callback.fail && !this.callback.close && !this.callback.status){
             this.clear();
         }
     }
@@ -111,39 +119,23 @@ class RequestModel {
     }
 }
 
-/*
-      App.user.get('socket').sendAndResponse({
-                request: {
-                    "data"      : changes,
-                    "data_type" : "pair_schedule",
-                    "event_name": "pair_schedule:setup"
-                },
-                onSuccess(){
 
-                    _.each(Ids, function (id) {
-                        var model = this.get(id);
-                        model.set('status', 'normal');
-                    }, this);
-
-                },
-                context: this
-            });
-
- */
-class SoketModel {
+class SocketModel {
     
     doReconnect = true;
     connect = null;
-    /*
-    doNotUpdate = null;
     connectionDelay = 1000;
     connectionAttempts = 0;
     connectionAttemptsLimit = 100;
     reconnectTM = null;
+
+    /*
+    doNotUpdate = null;
+
     */
     url = true;
     error = null;
-    status = 'loading'; // 'loading' | 'ok' | 'fail' | 'closed'
+    status = 'pending'; // 'pending' | 'opened' | 'closed'
     requests = [];
     requestsHash = {push:[], response:[]};
 
@@ -158,6 +150,8 @@ class SoketModel {
     }
 
     request(req){
+        var inst = this.add(req);
+        inst.request();
         return this.add(req);
     }
 
@@ -166,7 +160,6 @@ class SoketModel {
         this.requests.push(inst);
         return inst
     }
-
 
     _createConnection(){
         this.connect = new WebSocket(this.url);
@@ -177,42 +170,53 @@ class SoketModel {
 
         this.connect.onopen = ()=>{
 
-            this.status = 'ok';
+            this.status = 'opened';
+            this.error = null;
+            this._notice('open');
             this._sendAll();
-
 
         };
 
         this.connect.onclose = function(event) {
+
+            this._notice('close');
+            this._closeConnection();
+
             if(event.code === 1000 || event.code === 1005){
 
-                this._closeConnection();
                 return false;
-
             }
-
-            /*
-            this.set('connectionOk', false);
-            this.set('error', 'CONNECTION CLOSED');
-
+            this.error = event.code;
+            this._notice('fail');
             this.reconnectTM = setTimeout(function(){
 
-                this.reconnect();
+                this._reconnect();
 
             }.bind(this), this.connectionDelay);
-
-            */
             
 
         }.bind(this);
 
         this.connect.onerror = function(...arg) {
-            
+            this._notice('fail');
+            this.error = arg;
             console.error(`Socket error`, arg);
-            this.status = 'fail';
+
             
         }.bind(this);
         
+    }
+
+    _reconnect(){
+
+        if(!this.doReconnect || this.connectionAttempts >= this.connectionAttemptsLimit){
+            return false;
+        }
+
+        this._createConnection();
+        this.connectionDelay = this.connectionDelay * 2;
+        this.connectionAttempts ++;
+
     }
 
     _closeConnection(){
@@ -224,7 +228,7 @@ class SoketModel {
 
     _sendAll(){
 
-        _.forEach(this.requests, (reqObject, uuid)=>{
+        this.requests.forEach((reqObject)=>{
             if(!reqObject.sent){
                 this._send(reqObject);
             }
@@ -236,6 +240,12 @@ class SoketModel {
         reqObject.socket = null;
         _.remove(this.requests, function(item) {
             return item.id === reqObject.id;
+        });
+
+        _.forEach(this.requestsHash, (requestArr)=>{
+            _.remove(requestArr, function(item) {
+                return item.id === reqObject.id;
+            });
         });
     }
 
@@ -252,58 +262,23 @@ class SoketModel {
 
                     reqObject._response(item);
 
-
-                    /*
-                    var filteredData = reqObject._checkFilter(item, item.uuid);
-
-                    if(filteredData){
-
-
-                        if(reqObject.onResponseOnce){
-                            reqObject.onResponseOnce(filteredData);
-                            this._removeRequest(reqObject);
-                        } else {
-                            reqObject.onResponse(filteredData);
-                        }
-
-                    }
-*/
-
-
                 });
             }
 
         });
 
-
-        /*
-        this.requests.forEach((reqObject)=>{
-
-            if(!reqObject.onResponse){
-                if(reqObject.requestData && reqObject.sent){
-                    this._removeRequest(reqObject);
-                }
-                //TODO удалить объект если он уже отработал
-                return;
-            }
-
-            var filteredData = reqObject._checkFilter(data);
-            if(filteredData){
-                if(reqObject.onResponseOnce){
-                    reqObject.onResponseOnce(filteredData);
-                    this._removeRequest(reqObject);
-                } else {
-                    reqObject.onResponse(filteredData);
-                }
-            }
-        });
-        */
-
     }
 
+    _notice(type){
+        this.requests.forEach((reqObject)=>{
+            if(typeof reqObject.callback[type] === 'function'){
+                reqObject.callback[type]();
+            }
+        });
+    }
     _send(reqObject){
 
-        if(this.status !== 'ok'){
+        if(this.status !== 'opened'){
             return false;
         }
 
@@ -316,4 +291,4 @@ class SoketModel {
 
 }
 
-export default SoketModel;
+export default SocketModel;
