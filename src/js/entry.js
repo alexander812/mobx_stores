@@ -16,7 +16,25 @@ document.addEventListener("DOMContentLoaded", function() {
     ReactDom.render(React.createElement(Survey), document.querySelector('#survey-container'));
     ReactDom.render(React.createElement(Platform), document.querySelector('#platform-container'));
 
+    var tm = 1482166372;
+    var nowRounded = roundSec(tm);
+    var firstMin = nowRounded + 120;
+    var minsEndMoment = firstMin + (5 * 60);
 
+
+    findNext15(1482166740-(60*59-(46*60)));
+
+
+    function findNext15(ts){
+        var d = new Date(ts * 1000);
+        var min = d.getMinutes();
+        var roundedTs = Math.floor((d.setMinutes(0) && d.setSeconds(0))/1000);
+        return roundedTs + ((Math.floor(min / 15) * 15) + 15) * 60;
+    }
+    function roundSec(ts){
+        var d = new Date(ts*1000);
+        return  Math.floor(d.setSeconds(0) / 1000);
+    }
 
 
     /*
